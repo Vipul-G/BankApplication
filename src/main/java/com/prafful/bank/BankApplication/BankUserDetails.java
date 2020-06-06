@@ -1,5 +1,6 @@
 package com.prafful.bank.BankApplication;
 
+import com.prafful.bank.BankApplication.User.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,7 @@ public class BankUserDetails implements UserDetails {
         this.authorities = Collections.singletonList(new SimpleGrantedAuthority(
                 user.getRole()
         ));
-        this.active = user.isActive();
+        this.active = user.getActive();
     }
 
     BankUserDetails() {}

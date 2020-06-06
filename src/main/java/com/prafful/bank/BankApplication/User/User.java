@@ -1,4 +1,6 @@
-package com.prafful.bank.BankApplication;
+package com.prafful.bank.BankApplication.User;
+
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 
@@ -8,11 +10,12 @@ import javax.persistence.*;
 public abstract class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String password;
-    private String role;
-    private boolean active;
+
+    @NotNull private String password;
+    @NotNull private String role;
+    @NotNull private boolean active;
 
     public User(String password, String role) {
         this.password = password;
@@ -20,12 +23,11 @@ public abstract class User {
         this.active = true;
     }
 
-    public int getId() {
-        return id;
-    }
+    public User() {}
 
-    public void setId(int id) {
-        this.id = id;
+
+    public Integer getId() {
+        return id;
     }
 
     public String getPassword() {
@@ -44,7 +46,7 @@ public abstract class User {
         this.role = role;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 

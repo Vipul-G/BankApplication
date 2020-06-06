@@ -15,10 +15,10 @@ public class BankBranch extends Bank implements Runnable {
         super();
         this.name = name;
     }
-
     public BankBranch(BankBranch headquarter, Admin admin){ // if branch is headquarter then call this constructor after primary constructor
         super(headquarter, admin);
     }
+    public BankBranch() {}
 
     @Override
     public BankBranch getHeadquarter() {

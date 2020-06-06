@@ -3,7 +3,7 @@ package com.prafful.bank.BankApplication.Customer;
 
 import com.prafful.bank.BankApplication.Bank;
 import com.prafful.bank.BankApplication.BankBranch;
-import com.prafful.bank.BankApplication.User;
+import com.prafful.bank.BankApplication.User.User;
 
 import javax.persistence.*;
 
@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "Account")
 @PrimaryKeyJoinColumn(name="id")
 public class Account extends User implements Runnable {
-    private final String name;
+    private String name;
     private String contactNumber;
 
     @ManyToOne(optional = false)
@@ -24,6 +24,8 @@ public class Account extends User implements Runnable {
         this.name = name;
         this.balance = 0;
     }
+
+    public Account() { }
 
     @Override
     public void run() {

@@ -40,10 +40,10 @@ public abstract class Bank {
 
 
     // Methods to draw and add the capital by branch
-    public void addCapital(int capital) {
+    public final void addCapital(int capital) {
         totalCapital += capital;
     }
-    public int withDrawCapital(int amount) {
+    public final int withDrawCapital(int amount) {
         if(amount <= totalCapital) {
             totalCapital -= amount;
             return amount;

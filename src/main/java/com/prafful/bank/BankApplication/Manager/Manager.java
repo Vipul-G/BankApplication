@@ -3,7 +3,7 @@ package com.prafful.bank.BankApplication.Manager;
 
 import com.prafful.bank.BankApplication.Bank;
 import com.prafful.bank.BankApplication.Customer.Account;
-import com.prafful.bank.BankApplication.User;
+import com.prafful.bank.BankApplication.User.User;
 
 import javax.persistence.*;
 
@@ -22,6 +22,7 @@ public class Manager extends User {
         super(password, "MANAGER");
         this.name = name;
     }
+    public Manager() {}
 
     public Bank getBankBranch() {
         return bankBranch;

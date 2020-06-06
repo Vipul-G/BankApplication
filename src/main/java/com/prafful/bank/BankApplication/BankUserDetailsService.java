@@ -1,5 +1,7 @@
 package com.prafful.bank.BankApplication;
 
+import com.prafful.bank.BankApplication.User.User;
+import com.prafful.bank.BankApplication.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,11 +16,13 @@ public class BankUserDetailsService implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        int userId = Integer.parseInt(userName);
         Optional<User> user = userRepository.findById(userId);
 
         user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + userId));
 
         return user.map(BankUserDetails::new).get();
     }
+
 }

@@ -23,6 +23,7 @@ public class Loan {
         this.interest = interest;
         this.account = account;
     }
+    public Loan() {}
 
     @Override
     public String toString() {

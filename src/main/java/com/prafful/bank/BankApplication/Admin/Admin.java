@@ -3,7 +3,8 @@ package com.prafful.bank.BankApplication.Admin;
 
 import com.prafful.bank.BankApplication.BankBranch;
 import com.prafful.bank.BankApplication.Manager.Manager;
-import com.prafful.bank.BankApplication.User;
+import com.prafful.bank.BankApplication.User.User;
+import com.sun.istack.NotNull;
 
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -15,12 +16,14 @@ import javax.persistence.Table;
 @PrimaryKeyJoinColumn(name="id")
 public final class Admin extends User {
 
-    private String name;
+    @NotNull private String name;
 
     public Admin(String name, String password) {
         super(password, "ADMIN");
         this.name = name;
     }
+
+    public Admin() { }
 
     /*
      * Admin can generate new Branch
@@ -29,9 +32,6 @@ public final class Admin extends User {
      * Admin can see Bank's internal details
      * */
 
-    public BankBranch createBranch(String bName) {
-        return new BankBranch(bName);
-    }
 
     public void setHeadquartor(BankBranch branch) {
         branch.setHeadquarter(branch);
@@ -47,5 +47,15 @@ public final class Admin extends User {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "name='" + name + '\'' +
+                "role='" + this.getRole() + '\'' +
+                "password='" + this.getPassword() + '\'' +
+                "active='" + this.getActive() + '\'' +
+                '}';
     }
 }
