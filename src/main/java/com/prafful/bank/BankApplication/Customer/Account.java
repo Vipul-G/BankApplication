@@ -1,11 +1,13 @@
 package com.prafful.bank.BankApplication.Customer;
 
 
-import com.prafful.bank.BankApplication.Bank;
-import com.prafful.bank.BankApplication.BankBranch;
+import com.prafful.bank.BankApplication.Branch.BankBranch;
 import com.prafful.bank.BankApplication.User.User;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "Account")
@@ -15,7 +17,7 @@ public class Account extends User implements Runnable {
     private String contactNumber;
 
     @ManyToOne(optional = false)
-    private Bank bankBranch;
+    private BankBranch bankBranch;
     private int balance;
     private int income;
 
@@ -43,7 +45,7 @@ public class Account extends User implements Runnable {
         this.contactNumber = contactNumber;
     }
 
-    public Bank getBankBranch() {
+    public BankBranch getBankBranch() {
         return bankBranch;
     }
     public void setBankBranch(BankBranch bankBranch) {

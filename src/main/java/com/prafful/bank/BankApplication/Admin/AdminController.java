@@ -2,10 +2,7 @@ package com.prafful.bank.BankApplication.Admin;
 
 import com.prafful.bank.BankApplication.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController()
 public class AdminController {
@@ -16,7 +13,6 @@ public class AdminController {
 
     @PostMapping("/admin")
     String addUser(@RequestBody Admin admin) {
-        System.out.println("======Admin Post API hit=======");
         System.out.println(admin);
         try {
             adminService.addAdmin(admin);
@@ -27,12 +23,15 @@ public class AdminController {
         return admin.getName() + " Added";
     }
 
-    @GetMapping("/admin")
-    public String home() {
-        return "<h1>Welcome admin</h1>";
+    @GetMapping("/admin/{id}")
+    Admin getAdmin(@PathVariable int id) {
+        return adminService.getAdmin(id);
     }
 
-
+    @GetMapping("/admin")
+    public String home() {
+        return "<h1>Admin Controller</h1>";
+    }
     /*
     * Admin can generate new Branch
     * Admin can set headquarter of a Bank

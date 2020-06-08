@@ -1,14 +1,13 @@
 package com.prafful.bank.BankApplication.Admin;
 
 
-import com.prafful.bank.BankApplication.BankBranch;
+import com.prafful.bank.BankApplication.Bank.Bank;
+import com.prafful.bank.BankApplication.Branch.BankBranch;
 import com.prafful.bank.BankApplication.Manager.Manager;
 import com.prafful.bank.BankApplication.User.User;
 import com.sun.istack.NotNull;
 
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -17,6 +16,9 @@ import javax.persistence.Table;
 public final class Admin extends User {
 
     @NotNull private String name;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Bank bank;
 
     public Admin(String name, String password) {
         super(password, "ADMIN");
@@ -32,9 +34,8 @@ public final class Admin extends User {
      * Admin can see Bank's internal details
      * */
 
-
     public void setHeadquartor(BankBranch branch) {
-        branch.setHeadquarter(branch);
+        branch.setHeadquarter();
     }
 
     public void setBranchManager(BankBranch branch, String managerName, String managerPassword) {
@@ -47,6 +48,14 @@ public final class Admin extends User {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 
     @Override

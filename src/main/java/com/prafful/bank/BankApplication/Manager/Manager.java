@@ -1,7 +1,7 @@
 package com.prafful.bank.BankApplication.Manager;
 
 
-import com.prafful.bank.BankApplication.Bank;
+import com.prafful.bank.BankApplication.Branch.BankBranch;
 import com.prafful.bank.BankApplication.Customer.Account;
 import com.prafful.bank.BankApplication.User.User;
 
@@ -16,7 +16,7 @@ public class Manager extends User {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id")
-    private Bank bankBranch;
+    private BankBranch bankBranch;
 
     public Manager(String name, String password) {
         super(password, "MANAGER");
@@ -24,11 +24,11 @@ public class Manager extends User {
     }
     public Manager() {}
 
-    public Bank getBankBranch() {
+    public BankBranch getBankBranch() {
         return bankBranch;
     }
 
-    public void setBankBranch(Bank bankBranch) {
+    public void setBankBranch(BankBranch bankBranch) {
         this.bankBranch = bankBranch;
     }
 
