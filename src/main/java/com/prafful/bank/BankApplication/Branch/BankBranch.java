@@ -3,34 +3,90 @@ package com.prafful.bank.BankApplication.Branch;
 
 import com.prafful.bank.BankApplication.Bank.Bank;
 import com.prafful.bank.BankApplication.Customer.Account;
-import com.prafful.bank.BankApplication.Loan;
+import com.prafful.bank.BankApplication.Exceptions.AccountNotFoundException;
+import com.prafful.bank.BankApplication.Exceptions.LoanNotFoundException;
+import com.prafful.bank.BankApplication.Loan.Loan;
 import com.prafful.bank.BankApplication.Manager.Manager;
 import com.sun.istack.NotNull;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "Branch")
 public class BankBranch implements BranchInterface {
     @Id
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    }, fetch = FetchType.EAGER)
     private Bank bank;
 
+    @Column(unique = true)
     @NotNull private String name;
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Manager manager;
 
-    private int totalCustomer;
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "bankBranch"
+    ) private List<Account> accountList = new ArrayList<>();
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )private List<Loan> loanList = new ArrayList<>();
+
+    private int totalCustomer = 0;
+    @Column(name = "Loan") private int totalLoan = 0;
 
     public BankBranch() { }
     public BankBranch(Bank bank) {
         this.bank = bank;
+    }
+
+    //accountList
+    public void addAccount(Account account) {
+        this.accountList.add(account);
+        this.totalCustomer = this.accountList.size();
+    }
+    public List<Account> getAccountList() {
+        return this.accountList;
+    }
+    public Account getAccount(Integer accountId) throws HttpClientErrorException {
+        Stream<Account> stream = this.accountList.stream()
+                .filter((account) -> account.getId().equals(accountId));
+        Optional<Account> account = stream.findFirst();
+        account.orElseThrow(() -> new AccountNotFoundException(accountId));
+        return account.get();
+    }
+
+    //loanList
+    public void addLoan(Loan loan) {
+        this.loanList.add(loan);
+        this.totalLoan = this.loanList.size();
+    }
+    public List<Loan> getLoanList() {
+        return this.loanList;
+    }
+    public Loan getLoan(Integer loanId) {
+        Stream<Loan> stream = this.loanList.stream()
+                .filter((loan) -> loan.getId().equals(loanId));
+        Optional<Loan> loan = stream.findFirst();
+        loan.orElseThrow(() -> new LoanNotFoundException(loanId));
+        return loan.get();
     }
 
     @Override public BankBranch getHeadquarter() {
@@ -57,21 +113,6 @@ public class BankBranch implements BranchInterface {
         return this.totalCustomer;
     }
 
-    @Override public String getLoan(int amount, Account account) {
-        boolean loan_sanctioned = manager.sanctionLoan(account, amount);
-        if(!loan_sanctioned) {
-           return "Deat " + account.getName() + " your monthly income of"
-                   + account.getIncome() + " has not fullfill our criteria"
-                   + " of sactioning the loan of amount " + amount + " rupess";
-        }
-
-        new Loan(amount, 0, account);
-
-        account.addBalance(bank.withDrawCapital(amount));
-
-        return "Dear " + account.getName() + " your loan of " + amount +
-                " rupees has been sanctioned.";
-    }
 
     public String getName() {
         return name;
@@ -106,9 +147,9 @@ public class BankBranch implements BranchInterface {
     @Override public String toString() {
         return "BankBranch{" +
                 "branch=" + name +
-                ", manager=" + manager.getName() +
+                ", manager=" + (manager == null ? null : manager.getName()) +
                 ", totalCustomer=" + totalCustomer +
-                ", Bank=" + bank.getName()+
+                ", Bank=" + (bank == null ? null : bank.getName())+
                 '}';
     }
 

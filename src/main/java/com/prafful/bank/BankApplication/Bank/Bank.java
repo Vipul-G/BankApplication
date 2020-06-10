@@ -20,6 +20,9 @@ public class Bank {
     @Column(name = "id", updatable = false, nullable = false)
     private Integer id = 1111;
 
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private Admin admin;
+
     private String name = "PRAFFUL BANK";
     private int totalCustomers = 0;
     private int totalBranches = 0;
@@ -34,9 +37,6 @@ public class Bank {
             fetch = FetchType.LAZY,
             mappedBy = "bank"
     ) private List<BankBranch> branchList = new ArrayList<>();
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private static Admin admin;
 
     Bank() {
     }
@@ -77,12 +77,12 @@ public class Bank {
         return -1;
     }
 
-    public static Admin getAdmin() {
-        return admin;
+    public Admin getAdmin() {
+        return this.admin;
     }
 
-    public static void setAdmin(Admin admin) {
-        Bank.admin = admin;
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
     }
 
     public Integer getBankId() {

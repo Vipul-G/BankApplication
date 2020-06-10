@@ -2,12 +2,10 @@ package com.prafful.bank.BankApplication.Customer;
 
 
 import com.prafful.bank.BankApplication.Branch.BankBranch;
+import com.prafful.bank.BankApplication.Loan.Loan;
 import com.prafful.bank.BankApplication.User.User;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Account")
@@ -16,10 +14,18 @@ public class Account extends User implements Runnable {
     private String name;
     private String contactNumber;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    }, fetch = FetchType.LAZY, optional = false)
     private BankBranch bankBranch;
     private int balance;
     private int income;
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
+    private Loan loan = null;
 
     public Account(String name, String password) {
         super(password, "CUSTOMER");
@@ -63,6 +69,7 @@ public class Account extends User implements Runnable {
         if(amount > this.balance) {
             return -1; // insufficient balance in customer's account. Consider loan.
         }
+        this.balance -= amount;
         return this.bankBranch.withDrawCapital(amount);
     }
 
@@ -72,6 +79,18 @@ public class Account extends User implements Runnable {
 
     public void setIncome(int income) {
         this.income = income;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Loan getLoan() {
+        return loan;
+    }
+
+    public void setLoan(Loan loan) {
+        this.loan = loan;
     }
 
     @Override

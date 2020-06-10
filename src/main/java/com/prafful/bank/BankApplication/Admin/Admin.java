@@ -18,6 +18,7 @@ public final class Admin extends User {
     @NotNull private String name;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @NotNull
     private Bank bank;
 
     public Admin(String name, String password) {

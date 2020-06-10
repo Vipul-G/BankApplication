@@ -4,6 +4,7 @@ package com.prafful.bank.BankApplication.Manager;
 import com.prafful.bank.BankApplication.Branch.BankBranch;
 import com.prafful.bank.BankApplication.Customer.Account;
 import com.prafful.bank.BankApplication.User.User;
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 
@@ -16,13 +17,15 @@ public class Manager extends User {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "branch_id")
+    @NotNull
     private BankBranch bankBranch;
 
     public Manager(String name, String password) {
         super(password, "MANAGER");
         this.name = name;
     }
-    public Manager() {}
+    public Manager() {
+    }
 
     public BankBranch getBankBranch() {
         return bankBranch;
@@ -48,5 +51,13 @@ public class Manager extends User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "name='" + name + '\'' +
+                ", bankBranch=" + (bankBranch==null ? null : bankBranch.getName()) +
+                '}';
     }
 }

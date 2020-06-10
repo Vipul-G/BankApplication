@@ -12,6 +12,7 @@ public class BranchController {
 
     @PostMapping("/branch")
     String addBranch(@RequestBody BankBranch branch) {
+        System.out.println(branch);
         branchService.addBranch(branch);
         return "Branch " + branch.getName() + " has been added";
     }
